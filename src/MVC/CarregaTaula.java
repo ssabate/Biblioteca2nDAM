@@ -221,7 +221,9 @@ public class CarregaTaula {
         }
     }
     
-}/*
+}
+
+/*
 
 //Classe ModelCanvisBD usada en la BDOO db4o
 //Classse filla de DefaultTableModel que conté un Listener per automàticament actualitzar a la BD els canvis fets a una jTable
@@ -280,6 +282,52 @@ class ModelCanvisBD extends DefaultTableModel {
     public boolean isCellEditable(int row, int column) {
         //permitim editar des de la taula totes les columnes excepte la que conté una col·lecció
         return column!=3; //To change body of generated methods, choose Tools | Templates.
+    }
+}
+*/
+
+/*
+//Classe ModelCanvisBD usada en la BDR mySQL. Se li hauria de fer algun retoc per fer-la genèrica
+//Classse filla de DefaultTableModel que conté un Listener per automàticament actualitzar a la BD els canvis fets a una jTable
+class ModelCanvisBD extends DefaultTableModel {
+    
+    private ResultSet resultSet = null;
+    private int columnaID;
+
+    //El paràmetre ResultSet rs ha de ser el que hem usat per extreure les dades mostrades a la jTable, ha de ser del tipus actualitzable (CONCUR_UPDATABLE) 
+    //sinó provoca una excepció i ha d'estar obert, tant ell com l'statement que el genera
+    //Exemple:
+    //statement = JFramePrincipal.con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+    //resultSet = statement.executeQuery(sql);    
+
+    //El paràmetre colID indica quina columna del DefaultTableModel conté l'identificador de la fila de la taula
+    public ModelCanvisBD(Vector data, Vector columnNames, ResultSet rs, int colID) {
+        super(data, columnNames);
+        resultSet = rs;
+        columnaID = colID;
+        this.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                TableModel model = (TableModel) e.getSource();
+                Object data = model.getValueAt(row, column);
+
+                try {
+                    int id = (Integer) model.getValueAt(row, columnaID);
+                    resultSet.beforeFirst();
+                    while (resultSet.next() && resultSet.getInt(columnaID+1) != id);
+                    resultSet.updateObject(column + 1, data);
+                    resultSet.updateRow();
+                } catch (SQLException ex) {
+                    //Logger.getLogger(JFramePelis.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassCastException ex) {
+                    JOptionPane.showMessageDialog(null, "Canvi de dada incorrecte!!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        );
+
     }
 }
 */
