@@ -43,7 +43,7 @@ public class CarregaTaula {
         Vector data = new Vector();
         //Per poder actualitzar la BD des de la taula usaríem el model comentat
         //ModelCanvisBD model;
-        
+        DefaultTableModel model;
         
         //Anotem el nº de camps de la classe
         Field[] camps = classe.getDeclaredFields();
@@ -100,7 +100,8 @@ public class CarregaTaula {
 
         //Utilitzem el model que permet actualitzar la BD des de la taula
         //model = new ModelCanvisBD(data, columnNames, Model.getConnexio(), columnNames.size() - 1);
-        //taula.setModel(model);
+        model=new DefaultTableModel(data, columnnames);
+        taula.setModel(model);
 
         //Amago la darrera columna per a que no aparegue a la vista
         TableColumnModel tcm = taula.getColumnModel();
