@@ -100,7 +100,7 @@ public class CarregaTaula {
 
         //Utilitzem el model que permet actualitzar la BD des de la taula
         //model = new ModelCanvisBD(data, columnNames, Model.getConnexio(), columnNames.size() - 1);
-        model=new DefaultTableModel(data, columnnames);
+        model=new DefaultTableModel(data, columnNames);
         taula.setModel(model);
 
         //Amago la darrera columna per a que no aparegue a la vista
