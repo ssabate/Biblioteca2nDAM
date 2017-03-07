@@ -35,8 +35,8 @@ public class CarregaTaula {
     //Mètode que carrega els objectes continguts a l'ArrayList i el mostra a la JTable. La classe indica de quin tipo són els objectes de l'ArrayList
     //Si volem que es pugue modificar les dades directament des de la taula hauríem d'usar el model instància de la classe ModelCanvisBD, que varia d'una BD a una altra
     //Esta versió afegix a la darrera columna de la taula l'objecte mostrat a la mateixa de manera que el podrem recuperar fàcilment per fer updates, deletes, etc...
-    //Esta columna extra no apareix a la taula ja que està oculta
-    public void carregaTaula(ArrayList resultSet, JTable taula, Class<?> classe) {
+    //Esta columna extra no apareix a la taula ja que la borrem, però la retornem per poder-la afegir quan sigue necessari
+    public TableColumn carregaTaula(ArrayList resultSet, JTable taula, Class<?> classe) {
 
         //variables locals
         Vector columnNames = new Vector();
@@ -103,9 +103,10 @@ public class CarregaTaula {
         model=new DefaultTableModel(data, columnNames);
         taula.setModel(model);
 
-        //Amago la darrera columna per a que no aparegue a la vista
+        //Borro la darrera columna per a que no aparegue a la vista, però abans la guardo en una variable que al final serà el que retorna el mètode
         TableColumnModel tcm = taula.getColumnModel();
-        tcm.removeColumn(tcm.getColumn(tcm.getColumnCount() - 1));
+        TableColumn columna=tcm.getColumn(tcm.getColumnCount() - 1);
+        tcm.removeColumn(columna);
 
         //Fixo l'amplada de les columnes que sí es mostren
         TableColumn column;
@@ -113,6 +114,8 @@ public class CarregaTaula {
             column = taula.getColumnModel().getColumn(i);
             column.setMaxWidth(250);
         }
+        
+        return columna;
 
     }        
     

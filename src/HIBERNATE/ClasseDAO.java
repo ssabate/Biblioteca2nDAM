@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package HIBERNATE;
+package mvcdb4o.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -82,10 +83,10 @@ public class ClasseDAO<T> {
     }
 
     public List<T> obtenLlista() throws HibernateException {
-        List<T> llista = null;
+        ArrayList<T> llista = new ArrayList<>();
         try {
             iniciaOperacio();
-            llista = sesion.createQuery("from "+p.getSimpleName()).list();
+            llista = (ArrayList) sesion.createQuery("from "+p.getSimpleName()).list();
         } finally {
             sesion.close();
         }
