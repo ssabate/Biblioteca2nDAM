@@ -17,6 +17,8 @@ import java.util.Comparator;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
@@ -30,7 +32,7 @@ import javax.swing.table.TableModel;
  *
  * @author profe
  */
-public class CarregaTaula {
+public class CarregaTaulaCombo {
     
     //Mètode que carrega els objectes continguts a l'ArrayList i el mostra a la JTable. La classe indica de quin tipo són els objectes de l'ArrayList
     //Si volem que es pugue modificar les dades directament des de la taula hauríem d'usar el model instància de la classe ModelCanvisBD, que varia d'una BD a una altra
@@ -224,6 +226,12 @@ public class CarregaTaula {
             return (int) (((Field) o1).getName().compareToIgnoreCase(((Field) o2).getName()));
         }
     }
+    
+    //per carregar un JComboBox a partir d'un ArrayList que conté les dades 
+    public void carregaCombo(ArrayList resultSet, JComboBox combo) {
+        combo.setModel(new DefaultComboBoxModel((resultSet!=null?resultSet.toArray():new Object[]{})));
+    }
+
     
 }
 
