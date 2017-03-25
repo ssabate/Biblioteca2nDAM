@@ -33,7 +33,7 @@ import javax.swing.table.TableModel;
  * @author profe
  */
 public class CarregaTaulaCombo {
-    
+
     //Mètode que carrega els objectes continguts a l'ArrayList i el mostra a la JTable. La classe indica de quin tipo són els objectes de l'ArrayList
     //Si volem que es pugue modificar les dades directament des de la taula hauríem d'usar el model instància de la classe ModelCanvisBD, que varia d'una BD a una altra
     //Esta versió afegix a la darrera columna de la taula l'objecte mostrat a la mateixa de manera que el podrem recuperar fàcilment per fer updates, deletes, etc...
@@ -46,7 +46,7 @@ public class CarregaTaulaCombo {
         //Per poder actualitzar la BD des de la taula usaríem el model comentat
         //ModelCanvisBD model;
         DefaultTableModel model;
-        
+
         //Anotem el nº de camps de la classe
         Field[] camps = classe.getDeclaredFields();
         //Ordenem els camps alfabèticament
@@ -102,12 +102,12 @@ public class CarregaTaulaCombo {
 
         //Utilitzem el model que permet actualitzar la BD des de la taula
         //model = new ModelCanvisBD(data, columnNames, Model.getConnexio(), columnNames.size() - 1);
-        model=new DefaultTableModel(data, columnNames);
+        model = new DefaultTableModel(data, columnNames);
         taula.setModel(model);
 
         //Borro la darrera columna per a que no aparegue a la vista, però abans la guardo en una variable que al final serà el que retorna el mètode
         TableColumnModel tcm = taula.getColumnModel();
-        TableColumn columna=tcm.getColumn(tcm.getColumnCount() - 1);
+        TableColumn columna = tcm.getColumn(tcm.getColumnCount() - 1);
         tcm.removeColumn(columna);
 
         //Fixo l'amplada de les columnes que sí es mostren
@@ -116,15 +116,15 @@ public class CarregaTaulaCombo {
             column = taula.getColumnModel().getColumn(i);
             column.setMaxWidth(250);
         }
-        
+
         return columna;
 
-    }        
-    
+    }
+
     public static void carregaTaula_v2(ArrayList resultSet, JTable taula, Class<?> classe) {
         // TODO add your handling code here:
         //Quan tornem a carregar la taula perdem la selecció que haviem fet i posem filasel a -1
-        
+
         Vector columnNames = new Vector();
         Vector data = new Vector();
         DefaultTableModel model;
@@ -200,6 +200,48 @@ public class CarregaTaulaCombo {
         }
     }
 
+    public static void carregaTaula_v2(String[] nomCols, String[][] dades, JTable taula) {
+
+        //Mirem si han passat columnes i dades. En cas contrari sortim
+        if (nomCols == null || dades == null) {
+            return;
+        }
+
+        //Variables locals
+        Vector columnNames = new Vector();
+        Vector data = new Vector();
+        DefaultTableModel model;
+
+        //Anotem el nº de columnes a mostrar
+        int ncamps = nomCols.length;
+
+        //Recorrem l'array de noms de columna i els posem com a columnes de la taula
+        for (String s : nomCols) {
+            columnNames.addElement(s);
+        }
+
+        //Si hi ha algun element a l'array de dades omplim la taula
+        if (dades.length != 0) {
+
+            for (int i = 0; i < dades.length; i++) {
+                Vector row = new Vector(ncamps);
+                for (int j = 0; j < dades[i].length; j++) {
+                    row.add(dades[i][j]);
+                }
+                data.addElement(row);
+            }
+        }
+
+        model = new DefaultTableModel(data, columnNames);
+        taula.setModel(model);
+
+        TableColumn column;
+        for (int i = 0; i < taula.getColumnCount(); i++) {
+            column = taula.getColumnModel().getColumn(i);
+            column.setMaxWidth(250);
+        }
+    }
+
     public static class OrdenarMetodeClasseAlfabeticament implements Comparator {
 
         public int compare(Object o1, Object o2) {
@@ -226,13 +268,12 @@ public class CarregaTaulaCombo {
             return (int) (((Field) o1).getName().compareToIgnoreCase(((Field) o2).getName()));
         }
     }
-    
+
     //per carregar un JComboBox a partir d'un ArrayList que conté les dades 
     public void carregaCombo(ArrayList resultSet, JComboBox combo) {
-        combo.setModel(new DefaultComboBoxModel((resultSet!=null?resultSet.toArray():new Object[]{})));
+        combo.setModel(new DefaultComboBoxModel((resultSet != null ? resultSet.toArray() : new Object[]{})));
     }
 
-    
 }
 
 /*
@@ -296,9 +337,9 @@ class ModelCanvisBD extends DefaultTableModel {
         return column!=3; //To change body of generated methods, choose Tools | Templates.
     }
 }
-*/
+ */
 
-/*
+ /*
 //Classe ModelCanvisBD usada en la BDR mySQL. Se li hauria de fer algun retoc per fer-la genèrica
 //Classse filla de DefaultTableModel que conté un Listener per automàticament actualitzar a la BD els canvis fets a una jTable
 class ModelCanvisBD extends DefaultTableModel {
@@ -342,4 +383,4 @@ class ModelCanvisBD extends DefaultTableModel {
 
     }
 }
-*/
+ */
