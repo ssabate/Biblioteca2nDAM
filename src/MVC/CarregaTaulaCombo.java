@@ -200,7 +200,8 @@ public class CarregaTaulaCombo {
         }
     }
 
-    public static void carregaTaula_v2(String[] nomCols, String[][] dades, JTable taula) {
+    //Passem el nom de columnes i les dades en arrays
+    public static void carregaTaula(String[] nomCols, Object[][] dades, JTable taula) {
 
         //Mirem si han passat columnes i dades. En cas contrari sortim
         if (nomCols == null || dades == null) {
